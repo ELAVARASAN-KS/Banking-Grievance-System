@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>User Dashboard — Resolution Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1117] text-gray-200 min-h-screen">
+
+  <header class="bg-gray-900 p-6">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl text-blue-300 font-bold">Your Dashboard</h1>
+      <div>
+        <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded-lg">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-8">
+    <div class="mb-6 flex gap-4">
+      <a href="complaint.html" class="px-6 py-3 bg-blue-600 rounded-lg">File New Complaint</a>
+      <a href="check_status.html" class="px-6 py-3 bg-gray-700 rounded-lg">Check Status</a>
+    </div>
+
+    <section>
+      <h2 class="text-xl mb-4">Your Complaints</h2>
+      <div id="complaints" class="space-y-4"></div>
+    </section>
+  </main>
+
+<script>
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('auth');
+  window.location.href = 'login.html';
+});
+
+async function loadUserComplaints() {
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  if (!auth || auth.role === 'admin') { window.location.href = 'login.html'; return; }
+
+  const userId = auth.data.userId;
+  try {
+    const res = await fetch(`http://localhost:8080/api/complaints/user/${userId}`);
+    const list = await res.json();
+    const container = document.getElementById('complaints');
+    container.innerHTML = '';
+    if (!list || list.length === 0) {
+      container.innerHTML = '<p class="text-gray-400">No complaints yet.</p>';
+      return;
+    }
+    list.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'p-4 bg-[#111827] rounded-lg border border-gray-800';
+      el.innerHTML = `<h3 class="font-semibold text-lg">${c.subject}</h3>
+        <p class="text-sm text-gray-400">#${c.complaintNumber} • ${c.category}</p>
+        <p class="mt-2">${c.description}</p>
+        <p class="mt-2 text-sm">Status: <span class="font-semibold">${c.status}</span></p>`;
+      container.appendChild(el);
+    });
+  } catch (e) { console.error(e); alert('Network error'); }
+}
+loadUserComplaints();
+</script>
+
+</body>
+</html>

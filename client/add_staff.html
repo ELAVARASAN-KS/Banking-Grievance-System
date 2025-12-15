@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Add Staff — Resolution Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1117] text-gray-200 min-h-screen">
+
+<header class="bg-gray-900 p-4">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-xl text-blue-300 font-semibold">Add Staff</h1>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto p-6">
+  <div class="bg-[#161b22] p-6 rounded-lg border border-gray-800">
+    <div class="mb-3"><input id="fullName" placeholder="Full name" class="w-full p-3 bg-gray-900 rounded-lg" /></div>
+    <div class="mb-3"><input id="email" placeholder="Email" class="w-full p-3 bg-gray-900 rounded-lg" /></div>
+    <div class="mb-3"><input id="position" placeholder="Position" class="w-full p-3 bg-gray-900 rounded-lg" /></div>
+    <div class="mb-3"><input id="department" placeholder="Department" class="w-full p-3 bg-gray-900 rounded-lg" /></div>
+    <div class="mb-3"><input id="password" placeholder="Temporary password" class="w-full p-3 bg-gray-900 rounded-lg" /></div>
+
+    <div class="flex gap-3">
+      <button id="addBtn" class="px-4 py-2 bg-green-600 rounded-lg">Add Staff</button>
+      <a href="manage_staff.html" class="px-4 py-2 bg-gray-700 rounded-lg">Back</a>
+    </div>
+  </div>
+</main>
+
+<script>
+const API = 'http://localhost:8080/api';
+document.getElementById('addBtn').addEventListener('click', async () => {
+  const payload = {
+    fullName: document.getElementById('fullName').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    position: document.getElementById('position').value.trim(),
+    department: document.getElementById('department').value.trim(),
+    password: document.getElementById('password').value || 'password123'
+  };
+  if (!payload.fullName || !payload.email) { alert('Name and email required'); return; }
+  const res = await fetch(`${API}/staff`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+  const body = await res.json();
+  if (res.ok) { alert('Staff added'); window.location.href = 'manage_staff.html'; }
+  else alert(body.message || 'Failed');
+});
+</script>
+
+</body>
+</html>

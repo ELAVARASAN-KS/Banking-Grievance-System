@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard — Resolution Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1117] text-gray-200 min-h-screen">
+
+<header class="bg-gray-900 p-6">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl text-blue-300 font-bold">Admin Dashboard</h1>
+    <div>
+      <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded-lg">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto p-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+  <!-- Stats & Links -->
+  <div class="lg:col-span-1 space-y-4">
+    <div class="p-6 bg-[#161b22] rounded-lg border border-gray-800">
+      <h3 class="text-lg font-semibold">Quick Actions</h3>
+      <div class="mt-4 space-y-2">
+        <a href="add_staff.html" class="block px-4 py-2 bg-blue-600 rounded-lg text-center">Add Staff</a>
+        <a href="manage_staff.html" class="block px-4 py-2 bg-gray-700 rounded-lg text-center">Manage Staff</a>
+        <a href="total_complaint.html" class="block px-4 py-2 bg-gray-700 rounded-lg text-center">All Complaints</a>
+      </div>
+    </div>
+
+    <div id="statsPanel" class="p-6 bg-[#161b22] rounded-lg border border-gray-800">
+      <h3 class="text-lg font-semibold">Statistics</h3>
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <div class="p-3 bg-gray-800 rounded-lg text-center">
+          <div class="text-sm text-gray-400">Total</div>
+          <div id="statTotal" class="text-2xl font-bold">—</div>
+        </div>
+        <div class="p-3 bg-gray-800 rounded-lg text-center">
+          <div class="text-sm text-gray-400">Resolved</div>
+          <div id="statResolved" class="text-2xl font-bold">—</div>
+        </div>
+        <div class="p-3 bg-gray-800 rounded-lg text-center">
+          <div class="text-sm text-gray-400">In Progress</div>
+          <div id="statInprogress" class="text-2xl font-bold">—</div>
+        </div>
+        <div class="p-3 bg-gray-800 rounded-lg text-center">
+          <div class="text-sm text-gray-400">Unresolved</div>
+          <div id="statUnresolved" class="text-2xl font-bold">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complaints Table -->
+  <section class="lg:col-span-3 bg-[#0f1720] p-6 rounded-lg border border-gray-800">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold">All Complaints</h2>
+      <div class="flex gap-2">
+        <select id="categoryFilter" class="p-2 bg-gray-900 rounded-lg">
+          <option value="">All categories</option>
+        </select>
+        <button id="filterBtn" class="px-3 py-2 bg-blue-600 rounded-lg">Filter</button>
+        <button id="resetBtn" class="px-3 py-2 bg-gray-700 rounded-lg">Reset</button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="text-gray-400">
+          <tr>
+            <th class="py-2">#</th>
+            <th class="py-2">Subject</th>
+            <th class="py-2">Category</th>
+            <th class="py-2">User ID</th>
+            <th class="py-2">Date</th>
+            <th class="py-2">Status</th>
+            <th class="py-2">Staff</th>
+            <th class="py-2">Action</th>
+          </tr>
+        </thead>
+        <tbody id="complaintTable" class="text-gray-200"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Assign Modal -->
+<div id="assignModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4">
+  <div class="bg-[#161b22] p-6 rounded-lg w-full max-w-md border border-gray-800">
+    <h3 class="text-lg font-semibold mb-4">Assign Staff</h3>
+    <select id="staffSelect" class="w-full p-3 bg-gray-900 rounded-lg mb-4"></select>
+    <div class="flex justify-end gap-2">
+      <button id="assignCancel" class="px-4 py-2 bg-gray-700 rounded-lg">Cancel</button>
+      <button id="assignConfirm" class="px-4 py-2 bg-green-600 rounded-lg">Assign</button>
+    </div>
+  </div>
+</div>
+
+<script src="admin_dashboard.js"></script>
+</body>
+</html>

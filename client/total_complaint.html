@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>All Complaints — Resolution Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1117] text-gray-200 min-h-screen">
+<header class="bg-gray-900 p-4">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-xl text-blue-300 font-semibold">All Complaints</h1>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto p-6">
+  <div class="overflow-x-auto bg-[#111827] p-4 rounded-lg border border-gray-800">
+    <table class="w-full text-left">
+      <thead class="text-gray-400"><tr><th>#</th><th>Subject</th><th>Category</th><th>User</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="allComplaints"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+const API = 'http://localhost:8080/api';
+async function loadAll() {
+  const res = await fetch(`${API}/complaints`);
+  const list = await res.json();
+  const tbody = document.getElementById('allComplaints');
+  tbody.innerHTML = '';
+  list.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-gray-800';
+    tr.innerHTML = `<td class="py-2">${c.complaintNumber}</td>
+      <td class="py-2">${c.subject}</td><td class="py-2">${c.category}</td>
+      <td class="py-2">${c.userId}</td><td class="py-2">${c.dateRaised ?? ''}</td>
+      <td class="py-2">${c.status}</td>
+      <td class="py-2"><button onclick="view('${c.complaintNumber}')" class="px-3 py-1 bg-blue-600 rounded">View</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+function view(number){ window.location.href=`view_complaint.html?number=${encodeURIComponent(number)}`; }
+loadAll();
+</script>
+</body>
+</html>
